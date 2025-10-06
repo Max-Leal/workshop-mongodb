@@ -1,6 +1,7 @@
 package com.max.workshopmongodb.resources;
 
 import com.max.workshopmongodb.domain.User;
+import com.max.workshopmongodb.dto.UserDTO;
 import com.max.workshopmongodb.repository.UserRepository;
 import com.max.workshopmongodb.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/users")
@@ -21,8 +23,10 @@ public class UserResource { // enves de resource poderia ser controller
     private UserService service;
 
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<List<User>> findAll() {
-        return ResponseEntity.ok().body(service.findAll());
+    public ResponseEntity<List<UserDTO>> findAll() {
+        List<User> list = service.findAll();
+        List<UserDTO> listDto = list.stream().map(x -> new UserDTO(x)).collect(Collectors.toList());
+        return ResponseEntity.ok().body(listDto);
     }
 
 }
