@@ -48,4 +48,13 @@ public class UserResource { // enves de resource poderia ser controller
         service.delete(id);
     return ResponseEntity.noContent().build();
     }
+
+    @RequestMapping(value = "/{id}" , method = RequestMethod.PUT)
+    public ResponseEntity<Void> update(@RequestBody UserDTO dto, @PathVariable String id) {
+        User obj = service.fromDTO(dto);
+        obj.setId(id);
+        obj = service.update(obj);
+        return ResponseEntity.noContent().build();
+    }
+
 }
