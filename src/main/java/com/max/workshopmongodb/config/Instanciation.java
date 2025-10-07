@@ -1,6 +1,8 @@
 package com.max.workshopmongodb.config;
 
+import com.max.workshopmongodb.domain.Post;
 import com.max.workshopmongodb.domain.User;
+import com.max.workshopmongodb.repository.PostRepository;
 import com.max.workshopmongodb.repository.UserRepository;
 import com.max.workshopmongodb.services.UserService;
 
@@ -8,24 +10,36 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 
+import java.lang.reflect.Array;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.TimeZone;
 
 @Configuration
 public class Instanciation implements CommandLineRunner {
 
     @Autowired
-    private UserRepository repo;
+    private UserRepository uRepository;
+    @Autowired
+    private PostRepository pRepository;
 
     @Override
     public void run(String... args) throws Exception {
 
-        repo.deleteAll();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+
+        uRepository.deleteAll();
+        pRepository.deleteAll();
+
         User maria = new User(null, "Maria Brown", "maria@gmail.com");
         User alex = new User(null, "Alex Green", "alex@gmail.com");
         User bob = new User(null, "Bob Grey", "bob@gmail.com");
 
-        repo.save(maria);
-        repo.save(alex);
-        repo.save(bob);
+        Post post1 = new Post(null,sdf.parse("21/03/2018") , "Partiu Viagem!", "Vou viajar para São Paulo, Abraços!", maria);
+        Post post2 = new Post(null, sdf.parse("23/03/2018"), "Bom dia!","Acordei feliz hoje!", maria);
+
+        uRepository.saveAll(Arrays.asList(maria, alex, bob));
+        pRepository.saveAll(Arrays.asList(post1, post2));
     }
 }
