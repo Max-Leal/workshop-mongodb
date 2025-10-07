@@ -7,7 +7,9 @@ import com.max.workshopmongodb.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -33,5 +35,11 @@ public class UserResource { // enves de resource poderia ser controller
         return ResponseEntity.ok().body(new UserDTO(user));
     }
 
-
+    @PostMapping
+    public ResponseEntity<Void> insert(@RequestBody UserDTO dto) {
+        User obj = service.fromDTO(dto);
+        obj = service.insert(obj);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
+        return ResponseEntity.created(uri).build();
+    }
 }
