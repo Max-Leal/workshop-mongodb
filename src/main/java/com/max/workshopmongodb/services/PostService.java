@@ -1,8 +1,6 @@
 package com.max.workshopmongodb.services;
 
 import com.max.workshopmongodb.domain.Post;
-import com.max.workshopmongodb.domain.User;
-import com.max.workshopmongodb.dto.UserDTO;
 import com.max.workshopmongodb.repository.PostRepository;
 import com.max.workshopmongodb.services.exception.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,5 +21,9 @@ public class PostService {
         // }
         return repo.findById(id)
                 .orElseThrow(() -> new ObjectNotFoundException("User not found: " + id));
+    }
+
+    public List<Post> findByTitle(String text) {
+        return repo.findByTitleContainingIgnoreCase(text);
     }
 }
