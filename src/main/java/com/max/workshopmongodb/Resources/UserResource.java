@@ -1,5 +1,6 @@
 package com.max.workshopmongodb.resources;
 
+import com.max.workshopmongodb.domain.Post;
 import com.max.workshopmongodb.domain.User;
 import com.max.workshopmongodb.dto.UserDTO;
 import com.max.workshopmongodb.repository.UserRepository;
@@ -57,4 +58,9 @@ public class UserResource { // enves de resource poderia ser controller
         return ResponseEntity.noContent().build();
     }
 
+    @RequestMapping(value = "/{id}/posts", method = RequestMethod.GET)
+    public ResponseEntity<List<Post>> findPosts(@PathVariable String id) {
+        User user = service.findById(id);
+        return ResponseEntity.ok().body(user.getPosts());
+    }
 }
