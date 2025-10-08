@@ -2,6 +2,7 @@ package com.max.workshopmongodb.config;
 
 import com.max.workshopmongodb.domain.Post;
 import com.max.workshopmongodb.domain.User;
+import com.max.workshopmongodb.dto.AuthorDTO;
 import com.max.workshopmongodb.repository.PostRepository;
 import com.max.workshopmongodb.repository.UserRepository;
 import com.max.workshopmongodb.services.UserService;
@@ -22,6 +23,8 @@ public class Instanciation implements CommandLineRunner {
     private UserRepository uRepository;
     @Autowired
     private PostRepository pRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     public void run(String... args) throws Exception {
@@ -36,10 +39,15 @@ public class Instanciation implements CommandLineRunner {
         User alex = new User(null, "Alex Green", "alex@gmail.com");
         User bob = new User(null, "Bob Grey", "bob@gmail.com");
 
-        Post post1 = new Post(null,sdf.parse("21/03/2018") , "Partiu Viagem!", "Vou viajar para São Paulo, Abraços!", maria);
-        Post post2 = new Post(null, sdf.parse("23/03/2018"), "Bom dia!","Acordei feliz hoje!", maria);
-
         uRepository.saveAll(Arrays.asList(maria, alex, bob));
+
+        Post post1 = new Post(null,sdf.parse("21/03/2018") , "Partiu Viagem!", "Vou viajar para São Paulo, Abraços!", new AuthorDTO(maria));
+        Post post2 = new Post(null, sdf.parse("23/03/2018"), "Bom dia!","Acordei feliz hoje!", new AuthorDTO(maria));
+
+
         pRepository.saveAll(Arrays.asList(post1, post2));
+
+        maria.getPosts().addAll(Arrays.asList(post1, post2));
+        uRepository.save(maria);
     }
 }
